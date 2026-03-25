@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/mongodb.js";
 import authRoutes from "./routes/auth.js";
 
@@ -8,15 +9,16 @@ dotenv.config();
 
 const app = express();
 
-// ✅ Enable JSON parsing for POST requests
+// ✅ Enable JSON + cookies for POST requests
 app.use(express.json());
+app.use(cookieParser());
 
 // ✅ Enable CORS for your frontend (local + deployed)
 const allowedOrigins = [
-  process.env.FRONTEND_URL,          // local or deployed frontend URL
+  process.env.FRONTEND_URL,
   "http://localhost:5173",
-  "https://quick-quiz-puce.vercel.app"            // optional: allow local dev explicitly
-];
+  "https://quick-quiz-puce.vercel.app"
+].filter(Boolean);
 
 app.use(cors({
   origin: allowedOrigins,
